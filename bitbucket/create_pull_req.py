@@ -23,11 +23,16 @@ repo_slug = sys.argv[1]
 source_branch = sys.argv[2]
 destination_branch = sys.argv[3]
 
-
-# Suppress the InsecureRequestWarning
+#####
+# Uncomment the below if you are using a self-signed certificate and want
+# to suppress the InsecureRequestWarning
+#
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+#
+#####
 
-# --- Pull Request Data ---
+
+# --- Pull Request Info. Change as needed. ---
 pull_request_data = {
     "title": f"Merge of {source_branch} into {destination_branch}",
     "description": "Modifications in support of pull request",
@@ -60,13 +65,13 @@ response = requests.post(
     auth=(username, password),
     headers={"Content-Type": "application/json"},
     data=json.dumps(pull_request_data),
-    verify=False  # Disable SSL verification
+    verify=False  # Disable SSL verification - Remove this line to re-enable SSL
 )
 
 # --- Handle the Response ---
 if response.status_code == 201:
-    print("Pull request created successfully!")
-    print(response.text)  # Print the response from Bitbucket Server
+    print("Pull request created...")
+    print(response.text)  # Print the response Server
 else:
-    print(f"Error creating pull request: {response.status_code}")
+    print(f"Error creating Pull Request: {response.status_code}")
     print(response.text)  # Print the error message
