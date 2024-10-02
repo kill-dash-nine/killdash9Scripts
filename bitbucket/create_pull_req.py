@@ -2,22 +2,31 @@
 #
 # script to create pull requests on a locally hosted Bitbucket Server.
 #
+# v0.2 - kill-dash-nine
+#
 
 import requests
 import json
 import urllib3
 import sys
 
-# --- Get Branch Information from Command Line Arguments ---
+#####
+# Get Branch Information from Command Line Arguments
+#####
 if len(sys.argv) != 4:
     print("Usage: python create_pull_request.py <repo> <source_branch> <destination_branch>")
     sys.exit(1)
 
-# --- Configuration ---
+#####
+# Configuration
+#####
+# Change below as needed
+#####
 bitbucket_server_url = "https://example.com"
 project_key = "<proj key>"
 username = "<username>"
 password = "<passwd>"
+#####
 
 repo_slug = sys.argv[1]
 source_branch = sys.argv[2]
@@ -32,7 +41,13 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 #####
 
 
-# --- Pull Request Info. Change as needed. ---
+#####
+# Pull Request Data
+#
+# Change title and description as desired
+# Also change reviewers as needed
+#
+#####
 pull_request_data = {
     "title": f"Merge of {source_branch} into {destination_branch}",
     "description": "Modifications in support of pull request",
@@ -56,10 +71,10 @@ pull_request_data = {
     ]
 }
 
-# --- API Endpoint ---
+# API endpoint
 api_endpoint = f"{bitbucket_server_url}/rest/api/1.0/projects/{project_key}/repos/{repo_slug}/pull-requests"
 
-# --- Make the Request (Insecurely) ---
+# Make the request (Ignoring SSL errors) 
 response = requests.post(
     api_endpoint,
     auth=(username, password),
@@ -68,7 +83,7 @@ response = requests.post(
     verify=False  # Disable SSL verification - Remove this line to re-enable SSL
 )
 
-# --- Handle the Response ---
+# Process the response 
 if response.status_code == 201:
     print("Pull request created...")
     print(response.text)  # Print the response Server
